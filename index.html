@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weather App</title>
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <form id="form">
+      <input type="text" id="city" placeholder="Type a city.." />
+      <input type="submit" value="Search" id="submit-button" />
+      <button id="current-location-button">Current Location</button>
+    </form>
+    <div id="temperature">
+      <p id="thisCity"></p>
+      <p id="date-time"></p>
+      <p id="weather-description"></p>
+      <div>
+        <h1 id="weather-icon">🌤️</h1>
+        <p id="currentTemperature"></p>
+        <input type="submit" id="c" value="C" />
+        <input type="submit" id="f" value="F" />
+      </div>
+    </div>
+
+    <div id="details">
+      <p>Precipitation: <span id="precipitation"></span></p>
+      <p>Humidity: <span id="humidity"></span></p>
+      <p>Wind: <span id="wind"></span></p>
+    </div>
+
+    <script src="./index.mjs" type="module"></script>
+  </body>
+</html>
+<style>
+  body {
+    font-family: sans-serif;
+  }
+
+  html {
+    border: 2px lightgray solid;
+    border-radius: 10px;
+    padding: 10px;
+    width: 50%;
+    margin: 10px auto 0;
+    color: darkslategray;
+  }
+
+  #city {
+    padding: 10px;
+    border: 1px gray solid;
+    border-radius: 5px;
+  }
+
+  #submit-button {
+    margin-left: 10px;
+    background-color: blueviolet;
+    color: white;
+    border: none;
+    padding: 10px 40px;
+    border-radius: 5px;
+  }
+
+  #current-location-button {
+    background-color: lightblue;
+    color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  #temperature,
+  #details {
+    width: 30%;
+  }
+
+  #temperature {
+    float: left;
+  }
+
+  #details {
+    float: right;
+  }
+</style>
+<script>
+  function city(event) {
+    event.preventDefault();
+    let input = document.querySelector("#city");
+    let textCity = document.querySelector("#thisCity");
+    let text = (textCity.innerHTML = input.value);
+    fetchWeatherData(text);
+  }
+
+  function fetchWeatherData(cityName) {
+    // Ваш код для запиту погоди за назвою міста тут, використовуючи API OpenWeather
+    // Наприклад:
+    // const apiKey = 'your_api_key_here';
+    // const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
+    // Після отримання відповіді з сервера, оновіть відображення погоди на сторінці.
+  }
+
+  let currentCity = document.querySelector("form");
+  currentCity.addEventListener("submit", city);
+
+  function getCurrentLocationWeather() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        fetchWeatherDataByCoordinates(lat, lon);
+      });
+    } else {
+      alert("Geolocation is not available in your browser.");
+    }
+  }
+
+  function fetchWeatherDataByCoordinates(lat, lon) {
+    const apiKey = "502dc8f7ae36e57af1974e18d16a86f8";
+    // Ваш код для запиту погоди за координатами тут, використовуючи API OpenWeather
+    // Наприклад:
+    // const apiKey = 'your_api_key_here';
+    // const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+    // Після отримання відповіді з сервера, оновіть відображення погоди на сторінці.
+  }
+
+  let currentLocationButton = document.querySelector("#current-location-button");
+  currentLocationButton.addEventListener("click", getCurrentLocationWeather);
+
+  function dateTime() {
+    let now = new Date();
+    let date = now.getDate();
+    let day;
+    if (date == 0) {
+      day = "Monday";
+    } else if (date == 1) {
+      day = "Tuesday";
+    } else if (date == 2) {
+      day = "Wednesday";
+    } else if (date == 3) {
+      day = "Thursday";
+    } else if (date == 4) {
+      day = "Friday";
+    } else if (date == 5) {
+      day = "Saturday";
+    } else if (date == 6) {
+      day = "Sunday";
+    }
+
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    let fullHours = hours.toString().padStart(2, "0");
+    let fullMinutes = minutes.toString().padStart(2, "0");
+    return `${day}, ${fullHours}:${fullMinutes}`;
+  }
+
+  let timeDate = document.querySelector("#date-time");
+
+  timeDate.innerHTML = dateTime();
+
+  function cf() {
+    let currentTempElement = document.querySelector("#currentTemperature");
+    let currentTempText = currentTempElement.innerHTML;
+    let currentTemp = parseInt(currentTempText, 10);
+
+    if (isNaN(currentTemp)) {
+      currentTemp = 30;
+    }
+
+    let temperature;
+
+    if (currentTemp === 30) {
+      temperature = currentTemp + 32;
+    } else {
+      temperature = currentTemp - 32;
+    }
+
+    currentTempElement.innerHTML = temperature;
+  }
+
+  let currentTempElement = document.querySelector("#currentTemperature");
+  currentTempElement.innerHTML = 19;
+
+  let celcius = document.querySelector("#c");
+  let farenheit = document.querySelector("#f");
+
+  celcius.addEventListener("click", cf);
+  farenheit.addEventListener("click", cf);
+</script>
+
